@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar version="3.2"
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                        http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd">
+    
+    <display-name>MedFlow Distributors EJB Module</display-name>
+    <description>Enterprise Java Bean configuration for MedFlow Distributors</description>
+    
+    <!-- Session Bean: ProductCatalogBean -->
+    <enterprise-beans>
+        <session>
+            <display-name>ProductCatalogBean</display-name>
+            <ejb-name>ProductCatalogBean</ejb-name>
+            <home>com.medflow.ejb.ProductCatalogHome</home>
+            <remote>com.medflow.ejb.ProductCatalog</remote>
+            <ejb-class>com.medflow.ejb.ProductCatalogBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <description>EJB for managing pharmaceutical product catalog</description>
+        </session>
+        
+        <!-- Session Bean: OrderProcessingBean -->
+        <session>
+            <display-name>OrderProcessingBean</display-name>
+            <ejb-name>OrderProcessingBean</ejb-name>
+            <home>com.medflow.ejb.OrderProcessingHome</home>
+            <remote>com.medflow.ejb.OrderProcessing</remote>
+            <ejb-class>com.medflow.ejb.OrderProcessingBean</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+            <description>EJB for processing and managing pharmaceutical orders</description>
+        </session>
+    </enterprise-beans>
+    
+    <!-- Assembly Descriptor: Transaction Configuration -->
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>ProductCatalogBean</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+        
+        <container-transaction>
+            <method>
+                <ejb-name>OrderProcessingBean</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+    </assembly-descriptor>
+</ejb-jar>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/xml/ns/javaee/html"
+      xmlns:f="http://xmlns.jcp.org/xml/ns/javaee/faces"
+      xmlns:ui="http://xmlns.jcp.org/xml/ns/javaee/facelets"
+      lang="en">
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="title">Inventory Management</ui:define>
+    
+    <ui:define name="content">
+        <h2>Inventory Management</h2>
+        
+        <!-- Inventory Features Panel -->
+        <section class="info-panel">
+            <h3>Inventory Features</h3>
+            
+            <div class="feature-list">
+                <div class="feature">
+                    <h4>Stock Level Monitoring</h4>
+                    <p>Real-time tracking of pharmaceutical stock levels across all distribution warehouses. Automatic alerts when inventory falls below minimum thresholds.</p>
+                </div>
+                
+                <div class="feature">
+                    <h4>Lot Tracking</h4>
+                    <p>Comprehensive lot number tracking for full traceability of pharmaceutical products. Links inventory to purchase orders and shipments for complete audit trails.</p>
+                </div>
+                
+                <div class="feature">
+                    <h4>Expiry Monitoring</h4>
+                    <p>Automated expiration date monitoring with alerts for items approaching or past expiration. First-Expire-First-Out (FIFO) support for optimal inventory rotation.</p>
+                </div>
+                
+                <div class="feature">
+                    <h4>Cold Chain Management</h4>
+                    <p>Special handling for temperature-sensitive pharmaceutical products. Temperature control requirements and status tracking for cold chain items.</p>
+                </div>
+                
+                <div class="feature">
+                    <h4>Multi-Warehouse Support</h4>
+                    <p>Manage inventory across multiple distribution centers. Transfer inventory between warehouses and track location-specific stock levels.</p>
+                </div>
+                
+                <div class="feature">
+                    <h4>Supplier Management</h4>
+                    <p>Maintain supplier information and ratings. Track purchase orders and supplier performance metrics.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Current Inventory Summary -->
+        <section class="inventory-summary">
+            <h3>Inventory Overview</h3>
+            <p>Access comprehensive inventory management tools through the menu above. Use the Product Search to find specific items and view their current stock levels.</p>
+            
+            <h:form>
+                <h:link outcome="productSearch" styleClass="btn btn-primary" value="Search Inventory"/>
+                <h:link outcome="dashboard" styleClass="btn btn-secondary" value="View Dashboard"/>
+            </h:form>
+        </section>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Minimal WildFly configuration for MedFlow -->
+<!-- This is a simplified configuration. In production, use full WildFly standalone.xml -->
+<server xmlns="urn:jboss:domain:18.0">
+    <extensions>
+        <extension module="org.jboss.as.jpa"/>
+        <extension module="org.jboss.as.ejb3"/>
+        <extension module="org.jboss.as.jaxrs"/>
+        <extension module="org.jboss.as.messaging-activemq"/>
+    </extensions>
+    
+    <!-- DataSource configuration -->
+    <subsystem xmlns="urn:jboss:domain:datasources:6.0">
+        <datasources>
+            <datasource jndi-name="java:jboss/datasources/MedFlowDS" pool-name="MedFlowDS">
+                <connection-url>jdbc:postgresql://postgres:5432/medflowdb</connection-url>
+                <driver>postgresql</driver>
+                <security>
+                    <user-name>medflow</user-name>
+                    <password>medflow123</password>
+                </security>
+            </datasource>
+            <drivers>
+                <driver name="postgresql" module="org.postgresql">
+                    <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
+                </driver>
+            </drivers>
+        </datasources>
+    </subsystem>
+    
+    <!-- JMS configuration -->
+    <subsystem xmlns="urn:jboss:domain:messaging-activemq:13.0">
+        <server name="default">
+            <jms-queue name="OrderQueue" entries="java:/jms/queue/OrderQueue"/>
+        </server>
+    </subsystem>
+</server>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/xml/ns/javaee/html"
+      xmlns:f="http://xmlns.jcp.org/xml/ns/javaee/faces"
+      xmlns:ui="http://xmlns.jcp.org/xml/ns/javaee/facelets"
+      lang="en">
+<h:head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MedFlow Distributors</title>
+    <h:outputStylesheet library="css" name="styles.css"/>
+</h:head>
+<h:body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1>MedFlow Distributors</h1>
+            <nav class="nav-links">
+                <h:link outcome="index" value="Home"/>
+                <h:link outcome="pages/dashboard" value="Dashboard"/>
+                <h:link outcome="pages/productSearch" value="Product Search"/>
+                <h:link outcome="pages/inventory" value="Inventory"/>
+                <h:link outcome="pages/orderWizard" value="Create Order"/>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="container">
+            <h2>Wholesale Pharmaceutical Distribution System</h2>
+            
+            <section class="welcome-section">
+                <p>Welcome to MedFlow Distributors, your trusted partner in pharmaceutical wholesale distribution.</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Product Catalog</h3>
+                        <p>Access our comprehensive catalog of pharmaceutical products.</p>
+                        <h:link outcome="pages/productSearch" styleClass="btn btn-primary" value="Search Products"/>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>Order Management</h3>
+                        <p>Create and manage pharmaceutical orders with ease.</p>
+                        <h:link outcome="pages/orderWizard" styleClass="btn btn-primary" value="New Order"/>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>Inventory Tracking</h3>
+                        <p>Monitor stock levels and lot tracking across warehouses.</p>
+                        <h:link outcome="pages/inventory" styleClass="btn btn-primary" value="View Inventory"/>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <h3>Dashboard</h3>
+                        <p>View real-time statistics and recent orders.</p>
+                        <h:link outcome="pages/dashboard" styleClass="btn btn-primary" value="Go to Dashboard"/>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="system-info">
+                <h3>System Information</h3>
+                <table class="info-table">
+                    <tr>
+                        <td><strong>Platform</strong></td>
+                        <td>Java EE 7</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Application Server</strong></td>
+                        <td>WildFly 26</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database</strong></td>
+                        <td>PostgreSQL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Messaging</strong></td>
+                        <td>JMS (HornetQ)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ORM</strong></td>
+                        <td>Hibernate 5.x</td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 MedFlow Distributors. All rights reserved.</p>
+    </footer>
+</h:body>
+</html>

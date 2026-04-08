@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/xml/ns/javaee/html"
+      xmlns:f="http://xmlns.jcp.org/xml/ns/javaee/faces"
+      xmlns:ui="http://xmlns.jcp.org/xml/ns/javaee/facelets"
+      lang="en">
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="title">Dashboard</ui:define>
+    
+    <ui:define name="content">
+        <h2>Dashboard</h2>
+        
+        <!-- Statistics Grid -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">#{dashboardController.totalProducts}</div>
+                <div class="stat-label">Total Products</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">#{dashboardController.pendingOrders}</div>
+                <div class="stat-label">Pending Orders</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">#{dashboardController.expiringItemsCount}</div>
+                <div class="stat-label">Expiring Items</div>
+            </div>
+        </section>
+        
+        <!-- Recent Orders Table -->
+        <section class="recent-orders">
+            <h3>Recent Orders</h3>
+            
+            <h:form rendered="#{not empty dashboardController.recentOrders}">
+                <h:dataTable value="#{dashboardController.recentOrders}" 
+                            var="order"
+                            styleClass="data-table"
+                            rowClasses="odd, even">
+                    <h:column>
+                        <f:facet name="header">Order ID</f:facet>
+                        #{order.id}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Customer</f:facet>
+                        #{order.customer.name}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Order Date</f:facet>
+                        <h:outputText value="#{order.orderDate}">
+                            <f:convertDateTime pattern="MM/dd/yyyy HH:mm"/>
+                        </h:outputText>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Status</f:facet>
+                        <span class="status-#{fn:toLowerCase(order.status)}">#{order.status}</span>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Total</f:facet>
+                        <h:outputText value="#{order.total}">
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </h:outputText>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+            
+            <h:outputText rendered="#{empty dashboardController.recentOrders}" 
+                         value="No orders found."/>
+        </section>
+    </ui:define>
+</ui:composition>

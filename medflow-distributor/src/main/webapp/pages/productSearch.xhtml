@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/xml/ns/javaee/html"
+      xmlns:f="http://xmlns.jcp.org/xml/ns/javaee/faces"
+      xmlns:ui="http://xmlns.jcp.org/xml/ns/javaee/facelets"
+      lang="en">
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="title">Product Search</ui:define>
+    
+    <ui:define name="content">
+        <h2>Product Search</h2>
+        
+        <!-- Search Panel -->
+        <section class="search-panel">
+            <h:form>
+                <div class="form-group">
+                    <label for="searchTerm">Product Name/SKU:</label>
+                    <h:inputText id="searchTerm" 
+                                 value="#{searchController.searchTerm}"
+                                 placeholder="Enter product name or SKU..."/>
+                </div>
+                
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <h:selectOneMenu id="category" 
+                                    value="#{searchController.selectedCategory}">
+                        <f:selectItem itemValue="" itemLabel="All Categories"/>
+                        <f:selectItems value="#{searchController.categories}" 
+                                      var="cat"
+                                      itemValue="#{cat}"
+                                      itemLabel="#{cat}"/>
+                    </h:selectOneMenu>
+                </div>
+                
+                <div class="form-actions">
+                    <h:commandButton action="#{searchController.search}" 
+                                    value="Search"
+                                    styleClass="btn btn-primary"/>
+                    <h:commandButton action="#{searchController.clear}" 
+                                    value="Clear"
+                                    immediate="true"
+                                    styleClass="btn btn-secondary"/>
+                </div>
+            </h:form>
+        </section>
+        
+        <!-- Search Results -->
+        <section class="search-results">
+            <h3>Search Results</h3>
+            
+            <h:form rendered="#{not empty searchController.searchResults}">
+                <h:dataTable value="#{searchController.searchResults}" 
+                            var="product"
+                            styleClass="data-table"
+                            rowClasses="odd, even">
+                    <h:column>
+                        <f:facet name="header">SKU</f:facet>
+                        #{product.sku}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Product Name</f:facet>
+                        #{product.name}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Manufacturer</f:facet>
+                        #{product.manufacturer}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Category</f:facet>
+                        #{product.category}
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Price</f:facet>
+                        <h:outputText value="#{product.price}">
+                            <f:convertNumber type="currency" currencySymbol="$"/>
+                        </h:outputText>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">Cold Chain</f:facet>
+                        <h:outputText value="#{product.requiresColdChain ? 'Yes' : 'No'}"/>
+                    </h:column>
+                    
+                    <h:column>
+                        <f:facet name="header">DEA Schedule</f:facet>
+                        <h:outputText value="#{product.deaSchedule}">
+                            <f:converter converterId="deaScheduleConverter"/>
+                        </h:outputText>
+                    </h:column>
+                </h:dataTable>
+            </h:form>
+            
+            <h:outputText rendered="#{empty searchController.searchResults}" 
+                         value="No products found. Try a different search."/>
+        </section>
+    </ui:define>
+</ui:composition>

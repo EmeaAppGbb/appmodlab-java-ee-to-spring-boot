@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/xml/ns/javaee/html"
+      xmlns:f="http://xmlns.jcp.org/xml/ns/javaee/faces"
+      xmlns:ui="http://xmlns.jcp.org/xml/ns/javaee/facelets"
+      lang="en">
+<ui:composition template="/templates/layout.xhtml">
+    <ui:define name="title">Create Order</ui:define>
+    
+    <ui:define name="content">
+        <h2>Create Order - Multi-Step Wizard</h2>
+        
+        <h:form enctype="multipart/form-data">
+            <!-- Wizard Steps -->
+            <div class="wizard-container">
+                <div class="wizard-steps">
+                    <div class="wizard-step #{orderController.currentStep == 1 ? 'active' : ''}">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Customer Info</span>
+                    </div>
+                    <div class="wizard-step #{orderController.currentStep == 2 ? 'active' : ''}">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Add Products</span>
+                    </div>
+                    <div class="wizard-step #{orderController.currentStep == 3 ? 'active' : ''}">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Review Order</span>
+                    </div>
+                </div>
+                
+                <!-- Step 1: Customer Information -->
+                <section class="wizard-panel" rendered="#{orderController.currentStep == 1}">
+                    <h3>Step 1: Customer Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="customerName">Customer Name:</label>
+                        <h:inputText id="customerName" 
+                                    value="#{orderController.customerName}"
+                                    required="true"
+                                    requiredMessage="Customer name is required"/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customerType">Customer Type:</label>
+                        <h:selectOneMenu id="customerType" 
+                                        value="#{orderController.customerType}"
+                                        required="true"
+                                        requiredMessage="Customer type is required">
+                            <f:selectItem itemValue="" itemLabel="-- Select Type --"/>
+                            <f:selectItem itemValue="Hospital" itemLabel="Hospital"/>
+                            <f:selectItem itemValue="Pharmacy" itemLabel="Pharmacy"/>
+                        </h:selectOneMenu>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <h:inputTextarea id="address" 
+                                        value="#{orderController.address}"
+                                        rows="4"
+                                        cols="50"
+                                        required="true"
+                                        requiredMessage="Address is required"/>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <h:commandButton action="#{orderController.nextStep}" 
+                                        value="Next"
+                                        styleClass="btn btn-primary"/>
+                    </div>
+                </section>
+                
+                <!-- Step 2: Add Products -->
+                <section class="wizard-panel" rendered="#{orderController.currentStep == 2}">
+                    <h3>Step 2: Add Products</h3>
+                    
+                    <div class="form-group">
+                        <label for="product">Select Product:</label>
+                        <h:selectOneMenu id="product" 
+                                        value="#{orderController.selectedProductId}">
+                            <f:selectItem itemValue="" itemLabel="-- Select Product --"/>
+                            <f:selectItems value="#{orderController.availableProducts}" 
+                                          var="prod"
+                                          itemValue="#{prod.id}"
+                                          itemLabel="#{prod.sku} - #{prod.name}"/>
+                        </h:selectOneMenu>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <h:inputText id="quantity" 
+                                    value="#{orderController.quantity}"
+                                    type="number"
+                                    min="1"
+                                    required="true"
+                                    requiredMessage="Quantity is required"/>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lotNumber">Lot Number:</label>
+                        <h:inputText id="lotNumber" 
+                                    value="#{orderController.lotNumber}"
+                                    required="true"
+                                    requiredMessage="Lot number is required"/>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <h:commandButton action="#{orderController.addItem}" 
+                                        value="Add Item"
+                                        styleClass="btn btn-primary"/>
+                    </div>
+                    
+                    <!-- Current Order Items -->
+                    <section class="order-items">
+                        <h4>Order Items</h4>
+                        <h:form rendered="#{not empty orderController.orderItems}">
+                            <h:dataTable value="#{orderController.orderItems}" 
+                                        var="item"
+                                        styleClass="data-table"
+                                        rowClasses="odd, even">
+                                <h:column>
+                                    <f:facet name="header">Product</f:facet>
+                                    #{item.product.name}
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">SKU</f:facet>
+                                    #{item.product.sku}
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Quantity</f:facet>
+                                    #{item.quantity}
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Lot Number</f:facet>
+                                    #{item.lotNumber}
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Action</f:facet>
+                                    <h:commandButton action="#{orderController.removeItem(item)}" 
+                                                    value="Remove"
+                                                    styleClass="btn btn-danger"/>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                        <h:outputText rendered="#{empty orderController.orderItems}" 
+                                     value="No items added yet."/>
+                    </section>
+                    
+                    <div class="form-actions">
+                        <h:commandButton action="#{orderController.previousStep}" 
+                                        value="Previous"
+                                        styleClass="btn btn-secondary"/>
+                        <h:commandButton action="#{orderController.nextStep}" 
+                                        value="Next"
+                                        styleClass="btn btn-primary"
+                                        disabled="#{empty orderController.orderItems}"/>
+                    </div>
+                </section>
+                
+                <!-- Step 3: Review Order -->
+                <section class="wizard-panel" rendered="#{orderController.currentStep == 3}">
+                    <h3>Step 3: Review Order</h3>
+                    
+                    <div class="order-review">
+                        <h4>Customer Information</h4>
+                        <table class="review-table">
+                            <tr>
+                                <td><strong>Name:</strong></td>
+                                <td>#{orderController.customerName}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Type:</strong></td>
+                                <td>#{orderController.customerType}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Address:</strong></td>
+                                <td>#{orderController.address}</td>
+                            </tr>
+                        </table>
+                        
+                        <h4>Order Items</h4>
+                        <h:form rendered="#{not empty orderController.orderItems}">
+                            <h:dataTable value="#{orderController.orderItems}" 
+                                        var="item"
+                                        styleClass="data-table"
+                                        rowClasses="odd, even">
+                                <h:column>
+                                    <f:facet name="header">Product</f:facet>
+                                    #{item.product.name}
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Quantity</f:facet>
+                                    #{item.quantity}
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Unit Price</f:facet>
+                                    <h:outputText value="#{item.product.price}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
+                                </h:column>
+                                
+                                <h:column>
+                                    <f:facet name="header">Total</f:facet>
+                                    <h:outputText value="#{item.quantity * item.product.price}">
+                                        <f:convertNumber type="currency" currencySymbol="$"/>
+                                    </h:outputText>
+                                </h:column>
+                            </h:dataTable>
+                        </h:form>
+                        
+                        <h4>Order Total</h4>
+                        <div class="order-total">
+                            <h:outputText value="#{orderController.orderTotal}">
+                                <f:convertNumber type="currency" currencySymbol="$"/>
+                            </h:outputText>
+                        </div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <h:commandButton action="#{orderController.previousStep}" 
+                                        value="Previous"
+                                        styleClass="btn btn-secondary"/>
+                        <h:commandButton action="#{orderController.submit}" 
+                                        value="Submit Order"
+                                        styleClass="btn btn-primary"/>
+                    </div>
+                </section>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

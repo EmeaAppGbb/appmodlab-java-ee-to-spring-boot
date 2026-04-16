@@ -76,3 +76,95 @@ The JAX-RS REST API endpoints (`/api/products` and `/api/orders`) return JSON re
 | ![Order Wizard](assets/screenshots/05-order-wizard.png) | Multi-step order wizard |
 | ![API Products](assets/screenshots/06-api-products.png) | Products REST API |
 | ![API Orders](assets/screenshots/07-api-orders.png) | Orders REST API |
+
+## CLI Walkthrough
+
+This section documents the 9-step migration process performed using **GitHub Copilot CLI** (`gh copilot`). Each step is tagged in the repository on the `solution-final` branch so you can check out any point in the migration.
+
+### Step 1 — Explore Legacy App
+
+| | |
+|---|---|
+| **Tag** | `step-01-explore-legacy` |
+| **What was done** | Analyzed the Java EE codebase structure — identified EJBs, JPA entities, JSF views, JAX-RS endpoints, and WildFly configuration to build a complete inventory of components that need migration. |
+| **Command pattern** | `gh copilot explain "Analyze this Java EE 7 project structure and list all EJBs, entities, REST endpoints, and JSF views"` |
+
+### Step 2 — Analyze Dependencies
+
+| | |
+|---|---|
+| **Tag** | `step-02-analyze-deps` |
+| **What was done** | Mapped every Java EE 7 dependency in `pom.xml` to its Spring Boot 3.2 equivalent — javax.* → jakarta.*, EJB → Spring managed beans, JAX-RS → Spring MVC, JSF → Thymeleaf. |
+| **Command pattern** | `gh copilot explain "Map each Java EE dependency in pom.xml to its Spring Boot 3.2 equivalent"` |
+
+### Step 3 — Generate Modernization Spec
+
+| | |
+|---|---|
+| **Tag** | `step-03-modernization-spec` |
+| **What was done** | Created a comprehensive migration blueprint covering every component, the target architecture, conversion rules, and the order of operations for the remaining steps. |
+| **Command pattern** | `gh copilot explain "Generate a modernization specification to migrate this Java EE app to Spring Boot 3.2"` |
+
+### Step 4 — Scaffold Spring Boot
+
+| | |
+|---|---|
+| **Tag** | `step-04-scaffold-springboot` |
+| **What was done** | Created the Spring Boot 3.2 project skeleton — `pom.xml` with spring-boot-starter-web, spring-boot-starter-data-jpa, spring-boot-starter-thymeleaf, `application.properties`, and the main `@SpringBootApplication` class. |
+| **Command pattern** | `gh copilot suggest "Create a Spring Boot 3.2 project with Web, JPA, Thymeleaf, Security, and PostgreSQL starters"` |
+
+### Step 5 — Migrate EJBs
+
+| | |
+|---|---|
+| **Tag** | `step-05-migrate-ejbs` |
+| **What was done** | Converted 5 EJBs (`@Stateless` / `@Singleton`) to Spring `@Service` components, migrated 8 JPA entities from `javax.persistence` to `jakarta.persistence`, and generated 8 Spring Data JPA repositories. |
+| **Command pattern** | `gh copilot suggest "Convert this @Stateless EJB to a Spring @Service and update javax.persistence imports to jakarta.persistence"` |
+
+### Step 6 — Migrate Views
+
+| | |
+|---|---|
+| **Tag** | `step-06-migrate-views` |
+| **What was done** | Converted 6 JSF/XHTML pages to Thymeleaf HTML templates and created 7 Spring MVC `@Controller` classes to replace JSF backing beans. |
+| **Command pattern** | `gh copilot suggest "Convert this JSF XHTML page to a Thymeleaf template and create a Spring MVC controller"` |
+
+### Step 7 — Data Access
+
+| | |
+|---|---|
+| **Tag** | `step-07-data-access` |
+| **What was done** | Configured Spring Data JPA repositories, JMS messaging (replacing HornetQ with Spring JMS), Spring Security setup, and database seed data (`data.sql`). |
+| **Command pattern** | `gh copilot suggest "Configure Spring Data JPA, JMS messaging, and Spring Security for this application"` |
+
+### Step 8 — Containerize
+
+| | |
+|---|---|
+| **Tag** | `step-08-containerize` |
+| **What was done** | Created a multi-stage `Dockerfile` (Maven build → slim JRE runtime image) and a `docker-compose.yml` with PostgreSQL and ActiveMQ Artemis services. |
+| **Command pattern** | `gh copilot suggest "Create a multi-stage Dockerfile and docker-compose.yml for a Spring Boot app with PostgreSQL and ActiveMQ"` |
+
+### Step 9 — Build & Test
+
+| | |
+|---|---|
+| **Tag** | `step-09-build-test` |
+| **What was done** | Ran `mvn clean package` — **BUILD SUCCESS**. Started the containerized stack with `docker compose up` — application running on port **8080**. Verified the REST API returns **15 products** at `/api/products`. |
+| **Command pattern** | `gh copilot suggest "Build and test this Spring Boot application with Maven and Docker Compose"` |
+
+### Technology Migration Summary
+
+| Area | Legacy (Before) | Modern (After) |
+|---|---|---|
+| **Framework** | Java EE 7 | Spring Boot 3.2 |
+| **App Server** | WildFly 26 | Embedded Tomcat |
+| **API Layer** | JAX-RS (`@Path`) | Spring MVC (`@RestController`) |
+| **Business Logic** | EJB (`@Stateless` / `@Singleton`) | Spring `@Service` |
+| **Persistence** | JPA + `javax.persistence` | Spring Data JPA + `jakarta.persistence` |
+| **Views** | JSF / XHTML | Thymeleaf HTML |
+| **Security** | JAAS / WildFly Realm | Spring Security |
+| **Messaging** | HornetQ (JMS) | Spring JMS + ActiveMQ Artemis |
+| **Packaging** | WAR deployed to WildFly | Executable JAR in Docker container |
+| **Database** | PostgreSQL | PostgreSQL (unchanged) |
+| **Branch** | `main` | `solution-final` |

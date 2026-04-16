@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:fragment="title(pageTitle)">MedFlow Distributors - <th:block th:text="${pageTitle}">Application</th:block></title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <th:block th:fragment="head"></th:block>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" th:fragment="header">
+        <div class="header-content">
+            <h1>MedFlow Distributors</h1>
+            <nav class="nav-links">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/dashboard}">Dashboard</a>
+                <a th:href="@{/product-search}">Product Search</a>
+                <a th:href="@{/inventory}">Inventory</a>
+                <a th:href="@{/order-wizard}">Create Order</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="content">
+        <div class="container" th:fragment="content">
+            <!-- Default content if not overridden -->
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" th:fragment="footer">
+        <p>&copy; 2024 MedFlow Distributors. All rights reserved.</p>
+    </footer>
+</body>
+</html>

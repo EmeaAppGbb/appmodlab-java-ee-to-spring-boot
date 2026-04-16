@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MedFlow Distributors - Create Order</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" th:replace="~{layout :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="container">
+            <h2>Create Order - Multi-Step Wizard</h2>
+
+            <form th:action="@{/order-wizard}" method="post" enctype="multipart/form-data">
+                <!-- Wizard Steps -->
+                <div class="wizard-container">
+                    <div class="wizard-steps">
+                        <div class="wizard-step" th:classappend="${currentStep == 1} ? 'active' : ''">
+                            <span class="step-number">1</span>
+                            <span class="step-label">Customer Info</span>
+                        </div>
+                        <div class="wizard-step" th:classappend="${currentStep == 2} ? 'active' : ''">
+                            <span class="step-number">2</span>
+                            <span class="step-label">Add Products</span>
+                        </div>
+                        <div class="wizard-step" th:classappend="${currentStep == 3} ? 'active' : ''">
+                            <span class="step-number">3</span>
+                            <span class="step-label">Review Order</span>
+                        </div>
+                    </div>
+
+                    <!-- Step 1: Customer Information -->
+                    <section class="wizard-panel" th:if="${currentStep == 1}">
+                        <h3>Step 1: Customer Information</h3>
+
+                        <div class="form-group">
+                            <label for="customerName">Customer Name:</label>
+                            <input type="text" id="customerName" name="customerName"
+                                   th:value="${customerName}" required="required"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="customerType">Customer Type:</label>
+                            <select id="customerType" name="customerType" required="required">
+                                <option value="">-- Select Type --</option>
+                                <option value="Hospital" th:selected="${customerType == 'Hospital'}">Hospital</option>
+                                <option value="Pharmacy" th:selected="${customerType == 'Pharmacy'}">Pharmacy</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <textarea id="address" name="address" rows="4" cols="50"
+                                      required="required" th:text="${address}"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" name="action" value="next" class="btn btn-primary">Next</button>
+                        </div>
+                    </section>
+
+                    <!-- Step 2: Add Products -->
+                    <section class="wizard-panel" th:if="${currentStep == 2}">
+                        <h3>Step 2: Add Products</h3>
+
+                        <div class="form-group">
+                            <label for="product">Select Product:</label>
+                            <select id="product" name="selectedProductId">
+                                <option value="">-- Select Product --</option>
+                                <option th:each="prod : ${availableProducts}"
+                                        th:value="${prod.id}"
+                                        th:text="${prod.sku + ' - ' + prod.name}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity"
+                                   min="1" required="required"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lotNumber">Lot Number:</label>
+                            <input type="text" id="lotNumber" name="lotNumber" required="required"/>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" name="action" value="addItem" class="btn btn-primary">Add Item</button>
+                        </div>
+
+                        <!-- Current Order Items -->
+                        <section class="order-items">
+                            <h4>Order Items</h4>
+                            <table class="data-table" th:if="${orderItems != null and not #lists.isEmpty(orderItems)}">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>SKU</th>
+                                        <th>Quantity</th>
+                                        <th>Lot Number</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item, iterStat : ${orderItems}"
+                                        th:class="${iterStat.odd} ? 'odd' : 'even'">
+                                        <td th:text="${item.product.name}"></td>
+                                        <td th:text="${item.product.sku}"></td>
+                                        <td th:text="${item.quantity}"></td>
+                                        <td th:text="${item.lotNumber}"></td>
+                                        <td>
+                                            <button type="submit" name="action"
+                                                    th:value="'removeItem-' + ${iterStat.index}"
+                                                    class="btn btn-danger">Remove</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p th:if="${orderItems == null or #lists.isEmpty(orderItems)}">No items added yet.</p>
+                        </section>
+
+                        <div class="form-actions">
+                            <button type="submit" name="action" value="previous" class="btn btn-secondary">Previous</button>
+                            <button type="submit" name="action" value="next" class="btn btn-primary"
+                                    th:disabled="${orderItems == null or #lists.isEmpty(orderItems)}">Next</button>
+                        </div>
+                    </section>
+
+                    <!-- Step 3: Review Order -->
+                    <section class="wizard-panel" th:if="${currentStep == 3}">
+                        <h3>Step 3: Review Order</h3>
+
+                        <div class="order-review">
+                            <h4>Customer Information</h4>
+                            <table class="review-table">
+                                <tr>
+                                    <td><strong>Name:</strong></td>
+                                    <td th:text="${customerName}"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Type:</strong></td>
+                                    <td th:text="${customerType}"></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Address:</strong></td>
+                                    <td th:text="${address}"></td>
+                                </tr>
+                            </table>
+
+                            <h4>Order Items</h4>
+                            <table class="data-table" th:if="${orderItems != null and not #lists.isEmpty(orderItems)}">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Quantity</th>
+                                        <th>Unit Price</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item, iterStat : ${orderItems}"
+                                        th:class="${iterStat.odd} ? 'odd' : 'even'">
+                                        <td th:text="${item.product.name}"></td>
+                                        <td th:text="${item.quantity}"></td>
+                                        <td th:text="${#numbers.formatCurrency(item.product.price)}"></td>
+                                        <td th:text="${#numbers.formatCurrency(item.quantity * item.product.price)}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <h4>Order Total</h4>
+                            <div class="order-total" th:text="${#numbers.formatCurrency(orderTotal)}"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" name="action" value="previous" class="btn btn-secondary">Previous</button>
+                            <button type="submit" name="action" value="submit" class="btn btn-primary">Submit Order</button>
+                        </div>
+                    </section>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

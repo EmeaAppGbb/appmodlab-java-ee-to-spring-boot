@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MedFlow Distributors</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" th:replace="~{layout :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="container">
+            <h2>Wholesale Pharmaceutical Distribution System</h2>
+
+            <section class="welcome-section">
+                <p>Welcome to MedFlow Distributors, your trusted partner in pharmaceutical wholesale distribution.</p>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Product Catalog</h3>
+                        <p>Access our comprehensive catalog of pharmaceutical products.</p>
+                        <a th:href="@{/product-search}" class="btn btn-primary">Search Products</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Order Management</h3>
+                        <p>Create and manage pharmaceutical orders with ease.</p>
+                        <a th:href="@{/order-wizard}" class="btn btn-primary">New Order</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Inventory Tracking</h3>
+                        <p>Monitor stock levels and lot tracking across warehouses.</p>
+                        <a th:href="@{/inventory}" class="btn btn-primary">View Inventory</a>
+                    </div>
+
+                    <div class="feature-card">
+                        <h3>Dashboard</h3>
+                        <p>View real-time statistics and recent orders.</p>
+                        <a th:href="@{/dashboard}" class="btn btn-primary">Go to Dashboard</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="system-info">
+                <h3>System Information</h3>
+                <table class="info-table">
+                    <tr>
+                        <td><strong>Platform</strong></td>
+                        <td>Spring Boot</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Application Server</strong></td>
+                        <td>Embedded Tomcat</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database</strong></td>
+                        <td>PostgreSQL</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Messaging</strong></td>
+                        <td>Spring JMS (ActiveMQ Artemis)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ORM</strong></td>
+                        <td>Spring Data JPA / Hibernate</td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MedFlow Distributors - Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" th:replace="~{layout :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="container">
+            <h2>Dashboard</h2>
+
+            <!-- Statistics Grid -->
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${totalProducts}">0</div>
+                    <div class="stat-label">Total Products</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${pendingOrders}">0</div>
+                    <div class="stat-label">Pending Orders</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-number" th:text="${expiringItemsCount}">0</div>
+                    <div class="stat-label">Expiring Items</div>
+                </div>
+            </section>
+
+            <!-- Recent Orders Table -->
+            <section class="recent-orders">
+                <h3>Recent Orders</h3>
+
+                <table class="data-table" th:if="${not #lists.isEmpty(recentOrders)}">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Order Date</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order, iterStat : ${recentOrders}"
+                            th:class="${iterStat.odd} ? 'odd' : 'even'">
+                            <td th:text="${order.id}"></td>
+                            <td th:text="${order.customer.name}"></td>
+                            <td th:text="${#temporals.format(order.orderDate, 'MM/dd/yyyy HH:mm')}"></td>
+                            <td>
+                                <span th:class="'status-' + ${order.status.toString().toLowerCase()}"
+                                      th:text="${order.status}"></span>
+                            </td>
+                            <td th:text="${#numbers.formatCurrency(order.total)}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p th:if="${#lists.isEmpty(recentOrders)}">No orders found.</p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

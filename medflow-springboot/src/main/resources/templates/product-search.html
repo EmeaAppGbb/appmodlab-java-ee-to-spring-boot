@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>MedFlow Distributors - Product Search</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" th:replace="~{layout :: header}"></header>
+
+    <!-- Main Content -->
+    <main class="content">
+        <div class="container">
+            <h2>Product Search</h2>
+
+            <!-- Search Panel -->
+            <section class="search-panel">
+                <form th:action="@{/product-search}" method="get">
+                    <div class="form-group">
+                        <label for="searchTerm">Product Name/SKU:</label>
+                        <input type="text" id="searchTerm" name="searchTerm"
+                               th:value="${searchTerm}"
+                               placeholder="Enter product name or SKU..."/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select id="category" name="category">
+                            <option value="">All Categories</option>
+                            <option th:each="cat : ${categories}"
+                                    th:value="${cat}"
+                                    th:text="${cat}"
+                                    th:selected="${cat == selectedCategory}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                        <a th:href="@{/product-search}" class="btn btn-secondary">Clear</a>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Search Results -->
+            <section class="search-results">
+                <h3>Search Results</h3>
+
+                <table class="data-table" th:if="${searchResults != null and not #lists.isEmpty(searchResults)}">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Product Name</th>
+                            <th>Manufacturer</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Cold Chain</th>
+                            <th>DEA Schedule</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="product, iterStat : ${searchResults}"
+                            th:class="${iterStat.odd} ? 'odd' : 'even'">
+                            <td th:text="${product.sku}"></td>
+                            <td th:text="${product.name}"></td>
+                            <td th:text="${product.manufacturer}"></td>
+                            <td th:text="${product.category}"></td>
+                            <td th:text="${#numbers.formatCurrency(product.price)}"></td>
+                            <td th:text="${product.requiresColdChain} ? 'Yes' : 'No'"></td>
+                            <td th:text="${product.deaSchedule}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p th:if="${searchResults == null or #lists.isEmpty(searchResults)}">
+                    No products found. Try a different search.
+                </p>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" th:replace="~{layout :: footer}"></footer>
+</body>
+</html>

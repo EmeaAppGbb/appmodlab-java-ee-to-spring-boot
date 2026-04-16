@@ -24,7 +24,7 @@ public class Customer implements Serializable {
     @Column(name = "type", nullable = false)
     private String type;
 
-    @Column(name = "license_number", unique = true, nullable = false)
+    @Column(name = "license_number", unique = true)
     private String licenseNumber;
 
     @Column(name = "address")

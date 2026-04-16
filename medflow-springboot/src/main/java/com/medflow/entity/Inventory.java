@@ -37,7 +37,7 @@ public class Inventory implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date expiryDate;
 
-    @Column(name = "received_date", nullable = false)
+    @Column(name = "received_date")
     @Temporal(TemporalType.DATE)
     private Date receivedDate;
 

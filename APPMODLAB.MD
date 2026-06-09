@@ -11,7 +11,7 @@ modernizationTools: []
 agenticTools: []
 tags: ["ejb-migration", "jpa", "spring-security", "containerization"]
 extensions: ["github.copilot"]
-thumbnail: ""
+thumbnail: "https://raw.githubusercontent.com/EmeaAppGbb/appmodlab-java-ee-to-spring-boot/main/assets/thumbnail-gpt-image.png"
 video: ""
 version: "1.0.0"
 ---
